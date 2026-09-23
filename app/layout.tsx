@@ -9,11 +9,77 @@ const manrope = Manrope({
   display: 'swap',
 })
 
+const SITE_URL = 'https://pinpiece.ru'
+const TITLE = 'PinPiece — логистический центр грузоперевозок'
+const DESCRIPTION =
+  'PinPiece — грузоперевозки по городу, межгород и дальние рейсы. Собственный автопарк из 250+ машин, склад ответственного хранения, страховка груза до 10 млн ₽, отслеживание в реальном времени и расчёт стоимости за минуту.'
+
 export const metadata: Metadata = {
-  title: 'PinPiece — логистический центр грузоперевозок',
-  description:
-    'PinPiece — грузоперевозки по городу, межгород и дальние рейсы. Собственный автопарк, склад ответственного хранения, отслеживание груза в реальном времени и расчёт стоимости за минуту.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    template: '%s · PinPiece',
+  },
+  description: DESCRIPTION,
+  applicationName: 'PinPiece',
   generator: 'v0.app',
+  keywords: [
+    'грузоперевозки',
+    'перевозка грузов',
+    'логистический центр',
+    'доставка по городу',
+    'межгород',
+    'дальние рейсы',
+    'сборные грузы',
+    'рефрижератор',
+    'негабарит',
+    'склад ответственного хранения',
+    'фулфилмент',
+    'автопарк',
+  ],
+  authors: [{ name: 'PinPiece' }],
+  creator: 'PinPiece',
+  publisher: 'PinPiece',
+  alternates: {
+    canonical: SITE_URL,
+  },
+  category: 'logistics',
+  openGraph: {
+    type: 'website',
+    locale: 'ru_RU',
+    url: SITE_URL,
+    siteName: 'PinPiece',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'PinPiece — логистический центр грузоперевозок',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ['/og.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  formatDetection: {
+    telephone: true,
+  },
   icons: {
     icon: [
       {

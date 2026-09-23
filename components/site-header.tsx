@@ -8,10 +8,10 @@ import { Menu, X, Phone } from 'lucide-react'
 
 const NAV = [
   { label: 'Услуги', href: '#services' },
-  { label: 'География', href: '#coverage' },
+  { label: 'Направления', href: '#directions' },
   { label: 'Автопарк', href: '#fleet' },
-  { label: 'Как работаем', href: '#process' },
-  { label: 'Расчёт', href: '#calc' },
+  { label: 'Отзывы', href: '#reviews' },
+  { label: 'Контакты', href: '#contacts' },
 ]
 
 export function SiteHeader() {

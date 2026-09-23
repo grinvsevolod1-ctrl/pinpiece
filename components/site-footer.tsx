@@ -4,15 +4,32 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 const COLS = [
   {
     title: 'Услуги',
-    links: ['По городу', 'Межгород', 'Сборные грузы', 'Рефрижератор', 'Склад и фулфилмент'],
+    links: [
+      { label: 'По городу', href: '#services' },
+      { label: 'Межгород', href: '#services' },
+      { label: 'Сборные грузы', href: '#services' },
+      { label: 'Рефрижератор', href: '#services' },
+      { label: 'Склад и фулфилмент', href: '#services' },
+    ],
   },
   {
     title: 'Компания',
-    links: ['О центре', 'Автопарк', 'География', 'Документы', 'Вакансии'],
+    links: [
+      { label: 'Автопарк', href: '#fleet' },
+      { label: 'География', href: '#coverage' },
+      { label: 'Гарантии', href: '#guarantees' },
+      { label: 'Отрасли', href: '#industries' },
+      { label: 'Отзывы', href: '#reviews' },
+    ],
   },
   {
     title: 'Клиентам',
-    links: ['Расчёт стоимости', 'Отслеживание груза', 'Оплата и ЭДО', 'Частые вопросы'],
+    links: [
+      { label: 'Расчёт стоимости', href: '#calc' },
+      { label: 'Направления и цены', href: '#directions' },
+      { label: 'Вопросы и ответы', href: '#faq' },
+      { label: 'Контакты', href: '#contacts' },
+    ],
   },
 ]
 
@@ -45,12 +62,12 @@ export function SiteFooter() {
               <div className="text-sm font-bold text-foreground">{col.title}</div>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a
-                      href="#"
+                      href={l.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}
