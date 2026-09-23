@@ -26,7 +26,7 @@ const STEPS = [
 
 export function Process() {
   return (
-    <section id="process" className="relative overflow-hidden py-24 lg:py-32">
+    <section id="process" className="relative overflow-hidden border-y border-border/60 bg-[#0a0f1c] py-16 lg:py-24">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/40 to-background" />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>

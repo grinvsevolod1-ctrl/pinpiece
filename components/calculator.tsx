@@ -37,7 +37,7 @@ export function Calculator() {
   }, [mode, vehicle, distance, weight])
 
   return (
-    <section id="calc" className="relative py-24 lg:py-32">
+    <section id="calc" className="relative border-t border-border/60 bg-[#0a0f1c] py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="overflow-hidden rounded-4xl border border-border bg-gradient-to-br from-card to-background">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr]">

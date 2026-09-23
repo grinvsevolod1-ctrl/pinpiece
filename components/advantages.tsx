@@ -13,7 +13,7 @@ const ITEMS = [
 
 export function Advantages() {
   return (
-    <section className="py-24 lg:py-32">
+    <section className="py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal>

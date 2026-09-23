@@ -10,7 +10,7 @@ const VEHICLES = [
 
 export function Fleet() {
   return (
-    <section id="fleet" className="relative py-24 lg:py-32">
+    <section id="fleet" className="relative py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal className="lg:col-span-2">

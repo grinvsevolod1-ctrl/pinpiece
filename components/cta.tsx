@@ -6,7 +6,7 @@ import { Phone, ArrowRight } from 'lucide-react'
 
 export function Cta() {
   return (
-    <section className="px-5 pb-24 lg:px-8">
+    <section className="px-5 py-16 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <Reveal>
           <div className="relative overflow-hidden rounded-4xl border border-border">

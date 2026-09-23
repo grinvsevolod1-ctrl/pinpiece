@@ -31,8 +31,9 @@ export function Hero() {
         />
       </motion.div>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/55 to-background" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/65 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent" />
       <div
         className="absolute inset-0 animate-grid opacity-[0.18]"
         style={{
@@ -111,7 +112,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.32, ease }}
-          className="mt-14 grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-3"
+          className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3"
         >
           {[
             { icon: Truck, title: '250+ машин', sub: 'от «Газели» до фуры' },
@@ -120,7 +121,7 @@ export function Hero() {
           ].map((s) => (
             <div
               key={s.title}
-              className="rounded-2xl border border-border bg-card/50 p-4 backdrop-blur"
+              className="rounded-2xl border border-border bg-card/75 p-4 shadow-lg shadow-black/30 backdrop-blur-md"
             >
               <s.icon className="h-5 w-5 text-brand" />
               <div className="mt-2 text-base font-bold text-foreground">{s.title}</div>
