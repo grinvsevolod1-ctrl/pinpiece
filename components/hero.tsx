@@ -1,50 +1,134 @@
-import { ShieldCheck, Zap } from "lucide-react"
-import { Ticker } from "./ticker"
+'use client'
+
+import Image from 'next/image'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { ArrowRight, MapPin, ShieldCheck, Truck } from 'lucide-react'
+
+const ease = [0.22, 1, 0.36, 1] as const
 
 export function Hero() {
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  })
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.12])
+  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+
   return (
-    <section id="top" className="relative overflow-hidden bg-brand text-white">
-      {/* decorative sketch-style shapes */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.14]">
-        <div className="absolute -left-16 top-10 h-72 w-72 rounded-full border-2 border-white" />
-        <div className="absolute right-10 top-24 h-40 w-40 rotate-12 rounded-3xl border-2 border-white" />
-        <div className="absolute bottom-8 left-1/3 h-24 w-24 rounded-full border-2 border-dashed border-white" />
-      </div>
+    <section id="top" ref={ref} className="relative min-h-[100svh] overflow-hidden">
+      <motion.div style={{ y, scale }} className="absolute inset-0">
+        <Image
+          src="/hero-highway.png"
+          alt="Автопарк PinPiece на трассе"
+          fill
+          priority
+          className="object-cover"
+        />
+      </motion.div>
 
-      <div className="relative mx-auto max-w-6xl px-5 pb-8 pt-16 sm:px-8 sm:pt-24">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium">
-          <ShieldCheck className="h-4 w-4 text-signal" />
-          100% белое оформление · официально с первого дня
-        </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/55 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+      <div
+        className="absolute inset-0 animate-grid opacity-[0.18]"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)',
+          backgroundSize: '56px 56px',
+          maskImage: 'radial-gradient(ellipse 80% 60% at 30% 40%, black, transparent 75%)',
+        }}
+      />
 
-        <h1 className="mt-6 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-7xl">
-          Белая логистика{" "}
-          <span className="text-signal">города</span>
-        </h1>
+      <motion.div
+        style={{ opacity: fade }}
+        className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-5 pt-24 pb-16 lg:px-8"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease }}
+          className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-sm font-medium text-foreground/90 backdrop-blur"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-signal" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-signal" />
+          </span>
+          Логистический центр полного цикла · 24/7
+        </motion.div>
 
-        <p className="mt-6 max-w-xl text-pretty text-lg text-white/80 sm:text-xl">
-          PinPiece доставляет заказы за 60 минут — и оформляет каждого сотрудника в белую.
-          Официальный договор, белая зарплата и выплаты каждую неделю. Курьеру, кладовщику, диспетчеру, менеджеру.
-        </p>
+        <motion.h1
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.08, ease }}
+          className="mt-6 max-w-4xl text-balance text-4xl font-extrabold leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+        >
+          Грузоперевозки, которые{' '}
+          <span className="text-brand">доезжают вовремя</span> — по городу и за 5000 км
+        </motion.h1>
 
-        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.16, ease }}
+          className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground"
+        >
+          Собственный автопарк, склад ответственного хранения и отслеживание груза в реальном
+          времени. Берём на себя весь путь — от погрузки до подписи на выгрузке.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.24, ease }}
+          className="mt-9 flex flex-wrap items-center gap-4"
+        >
           <a
-            href="#apply"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-signal px-7 py-3.5 text-base font-bold text-signal-ink transition-transform hover:-translate-y-0.5"
+            href="#calc"
+            className={cn(
+              buttonVariants({ size: 'lg' }),
+              'group h-13 rounded-full bg-brand px-7 text-base font-semibold text-white hover:bg-brand-deep',
+            )}
           >
-            <Zap className="h-5 w-5" />
-            Работать в белую
+            Рассчитать перевозку
+            <ArrowRight className="ml-1 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </a>
           <a
-            href="#business"
-            className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/5 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white/15"
+            href="#services"
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'lg' }),
+              'h-13 rounded-full border-border bg-card/40 px-7 text-base font-semibold text-foreground backdrop-blur hover:bg-card',
+            )}
           >
-            Заказать доставку
+            Смотреть услуги
           </a>
-        </div>
-      </div>
+        </motion.div>
 
-      <Ticker />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.32, ease }}
+          className="mt-14 grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-3"
+        >
+          {[
+            { icon: Truck, title: '250+ машин', sub: 'от «Газели» до фуры' },
+            { icon: MapPin, title: '180 городов', sub: 'по всей России и СНГ' },
+            { icon: ShieldCheck, title: 'Страховка груза', sub: 'до 10 млн ₽' },
+          ].map((s) => (
+            <div
+              key={s.title}
+              className="rounded-2xl border border-border bg-card/50 p-4 backdrop-blur"
+            >
+              <s.icon className="h-5 w-5 text-brand" />
+              <div className="mt-2 text-base font-bold text-foreground">{s.title}</div>
+              <div className="text-sm text-muted-foreground">{s.sub}</div>
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

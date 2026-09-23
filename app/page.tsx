@@ -1,29 +1,31 @@
-import { SiteHeader } from "@/components/site-header"
-import { Hero } from "@/components/hero"
-import { TrustStrip } from "@/components/trust-strip"
-import { ValueProps } from "@/components/value-props"
-import { CourierSpotlight } from "@/components/courier-spotlight"
-import { HowItWorks } from "@/components/how-it-works"
-import { Vacancies } from "@/components/vacancies"
-import { Stats } from "@/components/stats"
-import { ForBusiness } from "@/components/for-business"
-import { ApplyCta } from "@/components/apply-cta"
-import { SiteFooter } from "@/components/site-footer"
+import { SiteHeader } from '@/components/site-header'
+import { Hero } from '@/components/hero'
+import { Ticker } from '@/components/ticker'
+import { Services } from '@/components/services'
+import { Coverage } from '@/components/coverage'
+import { Fleet } from '@/components/fleet'
+import { Process } from '@/components/process'
+import { Advantages } from '@/components/advantages'
+import { Calculator } from '@/components/calculator'
+import { Cta } from '@/components/cta'
+import { SiteFooter } from '@/components/site-footer'
 
 export default function Page() {
   return (
-    <main>
+    <>
       <SiteHeader />
-      <Hero />
-      <TrustStrip />
-      <ValueProps />
-      <CourierSpotlight />
-      <HowItWorks />
-      <Vacancies />
-      <Stats />
-      <ForBusiness />
-      <ApplyCta />
+      <main>
+        <Hero />
+        <Ticker />
+        <Services />
+        <Coverage />
+        <Fleet />
+        <Process />
+        <Advantages />
+        <Calculator />
+        <Cta />
+      </main>
       <SiteFooter />
-    </main>
+    </>
   )
 }

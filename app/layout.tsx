@@ -10,9 +10,9 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: 'PinPiece — белая логистика города',
+  title: 'PinPiece — логистический центр грузоперевозок',
   description:
-    'PinPiece — курьерская доставка с полностью белым оформлением. Официальное трудоустройство, белая зарплата и еженедельные выплаты для каждого — от курьера до менеджера.',
+    'PinPiece — грузоперевозки по городу, межгород и дальние рейсы. Собственный автопарк, склад ответственного хранения, отслеживание груза в реальном времени и расчёт стоимости за минуту.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light',
-  themeColor: '#1f4dff',
+  colorScheme: 'dark',
+  themeColor: '#070b14',
 }
 
 export default function RootLayout({
