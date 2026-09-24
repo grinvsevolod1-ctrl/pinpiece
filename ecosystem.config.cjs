@@ -6,7 +6,7 @@ module.exports = {
     {
       name: 'pinpiece',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start -H 0.0.0.0 -p 3000',
+      args: 'start -H 0.0.0.0 -p 3001',
       cwd: __dirname,
       instances: 1,
       exec_mode: 'fork',
@@ -14,7 +14,7 @@ module.exports = {
       max_memory_restart: '512M',
       env: {
         NODE_ENV: 'production',
-        PORT: 3000,
+        PORT: 3001,
         // Значения ниже берутся из .env (см. .env.example).
         // pm2 автоматически не читает .env — переменные подставляются
         // через `pm2 start ... --update-env` после `set -a; . ./.env; set +a`.
