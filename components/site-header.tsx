@@ -5,13 +5,14 @@ import { Logo } from './logo'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Menu, X, Phone } from 'lucide-react'
+import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const NAV = [
-  { label: 'Услуги', href: '#services' },
-  { label: 'Направления', href: '#directions' },
-  { label: 'Автопарк', href: '#fleet' },
-  { label: 'Отзывы', href: '#reviews' },
-  { label: 'Контакты', href: '#contacts' },
+  { label: 'Услуги', href: '/#services' },
+  { label: 'Направления', href: '/#directions' },
+  { label: 'Автопарк', href: '/#fleet' },
+  { label: 'Вакансии', href: '/vacancies' },
+  { label: 'Контакты', href: '/#contacts' },
 ]
 
 export function SiteHeader() {
@@ -47,6 +48,26 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <div className="flex items-center gap-1.5">
+            <a
+              href={SOCIALS.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram"
+              className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+            >
+              <TelegramIcon className="h-4.5 w-4.5" />
+            </a>
+            <a
+              href={SOCIALS.vk}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ВКонтакте"
+              className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+            >
+              <VkIcon className="h-4.5 w-4.5" />
+            </a>
+          </div>
           <a
             href="tel:+78001234567"
             className="flex items-center gap-2 text-sm font-semibold text-foreground"
@@ -55,7 +76,7 @@ export function SiteHeader() {
             8 800 123-45-67
           </a>
           <a
-            href="#calc"
+            href="/#calc"
             className={cn(
               buttonVariants(),
               'h-10 rounded-full bg-brand px-5 font-semibold text-white hover:bg-brand-deep',
@@ -89,7 +110,7 @@ export function SiteHeader() {
               </a>
             ))}
             <a
-              href="#calc"
+              href="/#calc"
               onClick={() => setOpen(false)}
               className={cn(
                 buttonVariants(),
@@ -98,6 +119,24 @@ export function SiteHeader() {
             >
               Рассчитать стоимость
             </a>
+            <div className="mt-4 flex gap-3">
+              <a
+                href={SOCIALS.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border py-2.5 text-sm font-semibold text-foreground"
+              >
+                <TelegramIcon className="h-5 w-5" /> Telegram
+              </a>
+              <a
+                href={SOCIALS.vk}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border py-2.5 text-sm font-semibold text-foreground"
+              >
+                <VkIcon className="h-5 w-5" /> ВКонтакте
+              </a>
+            </div>
           </nav>
         </div>
       )}

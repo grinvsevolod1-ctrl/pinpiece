@@ -1,17 +1,42 @@
-export function Logo({ className }: { className?: string }) {
+import { cn } from '@/lib/utils'
+
+export function Logo({
+  className,
+  size = 'md',
+}: {
+  className?: string
+  size?: 'md' | 'lg'
+}) {
   return (
-    <a href="#top" className={`flex items-center gap-2.5 ${className ?? ''}`}>
-      <span className="relative grid h-9 w-9 place-items-center rounded-xl bg-brand shadow-[0_0_24px_-4px] shadow-brand/70">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M12 2c-3.6 0-6.5 2.9-6.5 6.5 0 4.6 6.5 13.5 6.5 13.5s6.5-8.9 6.5-13.5C18.5 4.9 15.6 2 12 2Z"
-            fill="#fff"
-          />
-          <circle cx="12" cy="8.4" r="2.4" fill="#2f6bff" />
-        </svg>
+    <a
+      href="/"
+      aria-label="PinPiece — на главную"
+      className={cn('group inline-flex select-none flex-col leading-none', className)}
+    >
+      <span
+        className={cn(
+          'font-black uppercase tracking-[-0.055em] text-foreground',
+          size === 'lg' ? 'text-3xl' : 'text-xl',
+        )}
+      >
+        <span className="text-foreground">PIN</span>
+        <span className="bg-gradient-to-r from-brand to-[#5b8bff] bg-clip-text text-transparent">
+          PIECE
+        </span>
+        <span className="ml-0.5 inline-block h-1.5 w-1.5 translate-y-[-0.15em] rounded-[2px] bg-signal align-baseline transition-transform duration-300 group-hover:rotate-45" />
       </span>
-      <span className="text-lg font-extrabold tracking-tight text-foreground">
-        Pin<span className="text-brand">Piece</span>
+      <span
+        className={cn(
+          'mt-1 block h-[2px] w-0 rounded-full bg-gradient-to-r from-brand to-signal transition-all duration-300 group-hover:w-full',
+        )}
+      />
+      <span
+        className={cn(
+          'mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-muted-foreground',
+          size === 'lg' ? 'text-[11px]' : 'text-[10px]',
+        )}
+      >
+        Логистический центр
       </span>
     </a>
   )

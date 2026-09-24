@@ -1,34 +1,35 @@
 import { Logo } from './logo'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const COLS = [
   {
     title: 'Услуги',
     links: [
-      { label: 'По городу', href: '#services' },
-      { label: 'Межгород', href: '#services' },
-      { label: 'Сборные грузы', href: '#services' },
-      { label: 'Рефрижератор', href: '#services' },
-      { label: 'Склад и фулфилмент', href: '#services' },
+      { label: 'По городу', href: '/#services' },
+      { label: 'Межгород', href: '/#services' },
+      { label: 'Сборные грузы', href: '/#services' },
+      { label: 'Рефрижератор', href: '/#services' },
+      { label: 'Склад и фулфилмент', href: '/#services' },
     ],
   },
   {
     title: 'Компания',
     links: [
-      { label: 'Автопарк', href: '#fleet' },
-      { label: 'География', href: '#coverage' },
-      { label: 'Гарантии', href: '#guarantees' },
-      { label: 'Отрасли', href: '#industries' },
-      { label: 'Отзывы', href: '#reviews' },
+      { label: 'Автопарк', href: '/#fleet' },
+      { label: 'География', href: '/#coverage' },
+      { label: 'Гарантии', href: '/#guarantees' },
+      { label: 'Вакансии', href: '/vacancies' },
+      { label: 'Отзывы', href: '/#reviews' },
     ],
   },
   {
     title: 'Клиентам',
     links: [
-      { label: 'Расчёт стоимости', href: '#calc' },
-      { label: 'Направления и цены', href: '#directions' },
-      { label: 'Вопросы и ответы', href: '#faq' },
-      { label: 'Контакты', href: '#contacts' },
+      { label: 'Расчёт стоимости', href: '/#calc' },
+      { label: 'Направления и цены', href: '/#directions' },
+      { label: 'Вопросы и ответы', href: '/#faq' },
+      { label: 'Контакты', href: '/#contacts' },
     ],
   },
 ]
@@ -54,6 +55,26 @@ export function SiteFooter() {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-4 w-4 text-brand" /> Москва, ул. Логистическая, 1
               </div>
+            </div>
+            <div className="mt-6 flex gap-3">
+              <a
+                href={SOCIALS.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Telegram"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+              >
+                <TelegramIcon className="h-5 w-5" />
+              </a>
+              <a
+                href={SOCIALS.vk}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="ВКонтакте"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
+              >
+                <VkIcon className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
