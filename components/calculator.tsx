@@ -22,17 +22,20 @@ import {
 type Mode = 'city' | 'intercity'
 
 const VEHICLES = [
-  { id: 'gazelle', name: '«Газель» · до 1,5 т / 9 м³', base: 2500, cityKm: 35, perKm: 32, freeKg: 1500 },
-  { id: 'three', name: '3-тонник · до 3 т / 16 м³', base: 3800, cityKm: 42, perKm: 40, freeKg: 3000 },
-  { id: 'five', name: '5-тонник · до 5 т / 25 м³', base: 4500, cityKm: 48, perKm: 46, freeKg: 5000 },
-  { id: 'ten', name: '10-тонник · до 10 т / 45 м³', base: 6500, cityKm: 55, perKm: 54, freeKg: 10000 },
-  { id: 'truck', name: 'Фура · до 20 т / 92 м³', base: 9000, cityKm: 65, perKm: 62, freeKg: 20000 },
-  { id: 'reefer', name: 'Рефрижератор · до 20 т', base: 11000, cityKm: 78, perKm: 74, freeKg: 20000 },
+  { id: 'gazelle', name: '«Газель» · до 1,5 т / 9 м³', base: 30, cityKm: 0.5, perKm: 0.4, freeKg: 1500 },
+  { id: 'three', name: '3-тонник · до 3 т / 16 м³', base: 45, cityKm: 0.6, perKm: 0.5, freeKg: 3000 },
+  { id: 'five', name: '5-тонник · до 5 т / 25 м³', base: 55, cityKm: 0.65, perKm: 0.55, freeKg: 5000 },
+  { id: 'ten', name: '10-тонник · до 10 т / 45 м³', base: 75, cityKm: 0.75, perKm: 0.65, freeKg: 10000 },
+  { id: 'truck', name: 'Фура · до 20 т / 92 м³', base: 100, cityKm: 0.9, perKm: 0.75, freeKg: 20000 },
+  { id: 'reefer', name: 'Рефрижератор · до 20 т', base: 130, cityKm: 1.1, perKm: 0.95, freeKg: 20000 },
 ]
 
-const LOADER_FEE = 1500
-const HYDRO_FEE = 2500
+const LOADER_FEE = 20
+const HYDRO_FEE = 30
+const OVERWEIGHT_PER_KG = 0.03
 const URGENT_MULT = 1.2
+
+const usd = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`
 
 type Line = { label: string; value: number }
 
@@ -70,19 +73,19 @@ export function Calculator() {
     if (roundTrip) mileage = Math.round(mileage * 1.7)
     if (mileage > 0) {
       result.push({
-        label: `Пробег ${roundTrip ? '(туда-обратно) ' : ''}${dist} км × ${rate} ₽`,
+        label: `Пробег ${roundTrip ? '(туда-обратно) ' : ''}${dist} км × $${rate}`,
         value: mileage,
       })
     }
 
     const overWeight = Math.max(0, w - v.freeKg)
     if (overWeight > 0) {
-      const wf = Math.round(overWeight * 3)
-      result.push({ label: `Перевес ${overWeight} кг × 3 ₽`, value: wf })
+      const wf = Math.round(overWeight * OVERWEIGHT_PER_KG)
+      result.push({ label: `Перевес ${overWeight} кг × $${OVERWEIGHT_PER_KG}`, value: wf })
     }
 
     if (loaders > 0) {
-      result.push({ label: `Грузчики ${loaders} × ${LOADER_FEE} ₽`, value: loaders * LOADER_FEE })
+      result.push({ label: `Грузчики ${loaders} × $${LOADER_FEE}`, value: loaders * LOADER_FEE })
     }
     if (hydro) result.push({ label: 'Гидроборт', value: HYDRO_FEE })
 
@@ -129,7 +132,7 @@ export function Calculator() {
           Расстояние: `${distance} км`,
           Вес: `${weight} кг`,
           Грузчики: loaders,
-          Оценка: `${total.toLocaleString('ru-RU')} ₽`,
+          Оценка: usd(total),
         }),
       })
       if (!res.ok) throw new Error('bad')
@@ -287,7 +290,7 @@ export function Calculator() {
                   transition={{ duration: 0.3 }}
                   className="mt-3 text-5xl font-extrabold tracking-tight text-foreground"
                 >
-                  {total.toLocaleString('ru-RU')} ₽
+                  {usd(total)}
                 </motion.div>
 
                 {/* Breakdown */}
@@ -296,7 +299,7 @@ export function Calculator() {
                     <div key={l.label} className="flex items-center justify-between gap-4 text-sm">
                       <span className="text-muted-foreground">{l.label}</span>
                       <span className="shrink-0 font-semibold text-foreground/90">
-                        {l.value.toLocaleString('ru-RU')} ₽
+                        {usd(l.value)}
                       </span>
                     </div>
                   ))}

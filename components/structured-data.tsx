@@ -30,7 +30,7 @@ export function StructuredData() {
         name: 'PinPiece',
         image: `${SITE_URL}/og.png`,
         url: SITE_URL,
-        priceRange: '₽₽',
+        priceRange: '$$',
         address: {
           '@type': 'PostalAddress',
           streetAddress: 'ул. Логистическая, 1',

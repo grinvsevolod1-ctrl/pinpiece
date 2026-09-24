@@ -4,7 +4,7 @@ import { Truck, ShieldCheck, Radar, FileText, Headphones, Wallet } from 'lucide-
 
 const ITEMS = [
   { icon: Truck, title: 'Собственный автопарк', text: '250+ машин без посредников' },
-  { icon: ShieldCheck, title: 'Страховка груза', text: 'Ответственность до 10 млн ₽' },
+  { icon: ShieldCheck, title: 'Страховка груза', text: 'Ответственность до $100 000' },
   { icon: Radar, title: 'Трекинг 24/7', text: 'GPS и статусы в реальном времени' },
   { icon: FileText, title: 'ЭДО и полный пакет', text: 'Закрывающие в тот же день' },
   { icon: Headphones, title: 'Личный менеджер', text: 'Один контакт по всем рейсам' },

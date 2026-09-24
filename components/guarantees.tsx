@@ -1,11 +1,11 @@
 import { Reveal } from './reveal'
-import { ShieldCheck, FileCheck2, BadgeRussianRuble, Clock4 } from 'lucide-react'
+import { ShieldCheck, FileCheck2, BadgeDollarSign, Clock4 } from 'lucide-react'
 
 const GUARANTEES = [
   {
     icon: ShieldCheck,
     title: 'Страхование каждого груза',
-    text: 'Ответственность перевозчика застрахована на сумму до 10 млн ₽. Оформляем страховку груза под полную стоимость по запросу.',
+    text: 'Ответственность перевозчика застрахована на сумму до $100 000. Оформляем страховку груза под полную стоимость по запросу.',
   },
   {
     icon: FileCheck2,
@@ -13,7 +13,7 @@ const GUARANTEES = [
     text: 'Работаем по договору с юрлицами и ИП. ЭДО, счета-фактуры, УПД и транспортные накладные — закрывающие в тот же день.',
   },
   {
-    icon: BadgeRussianRuble,
+    icon: BadgeDollarSign,
     title: 'Фиксированная цена',
     text: 'Стоимость закрепляем в заявке до старта рейса. Никаких доплат за пробки, ожидание или топливо в пути.',
   },
@@ -47,7 +47,7 @@ export function Guarantees() {
                   <dd className="text-sm text-muted-foreground">рейсов точно в срок</dd>
                 </div>
                 <div>
-                  <dt className="text-3xl font-extrabold text-foreground">10 млн ₽</dt>
+                  <dt className="text-3xl font-extrabold text-foreground">$100K</dt>
                   <dd className="text-sm text-muted-foreground">максимальное покрытие</dd>
                 </div>
               </dl>

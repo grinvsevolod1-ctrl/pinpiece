@@ -133,7 +133,7 @@ export function Hero() {
           {[
             { icon: Truck, title: '250+ машин', sub: 'от «Газели» до фуры' },
             { icon: MapPin, title: '180 городов', sub: 'по всей России и СНГ' },
-            { icon: ShieldCheck, title: 'Страховка груза', sub: 'до 10 млн ₽' },
+            { icon: ShieldCheck, title: 'Страховка груза', sub: 'до $100 000' },
           ].map((s) => (
             <div
               key={s.title}
