@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Logo } from './logo'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { reachGoal } from '@/lib/metrika'
 import { Menu, X, Phone } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
@@ -53,6 +54,7 @@ export function SiteHeader() {
               href={SOCIALS.telegram}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => reachGoal('telegram_click')}
               aria-label="Telegram"
               className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
             >
@@ -62,6 +64,7 @@ export function SiteHeader() {
               href={SOCIALS.vk}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => reachGoal('vk_click')}
               aria-label="ВКонтакте"
               className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-brand hover:text-brand"
             >
@@ -70,6 +73,7 @@ export function SiteHeader() {
           </div>
           <a
             href="tel:+78001234567"
+            onClick={() => reachGoal('phone_click')}
             className="flex items-center gap-2 text-sm font-semibold text-foreground"
           >
             <Phone className="h-4 w-4 text-brand" />
@@ -124,6 +128,7 @@ export function SiteHeader() {
                 href={SOCIALS.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => reachGoal('telegram_click')}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border py-2.5 text-sm font-semibold text-foreground"
               >
                 <TelegramIcon className="h-5 w-5" /> Telegram
@@ -132,6 +137,7 @@ export function SiteHeader() {
                 href={SOCIALS.vk}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => reachGoal('vk_click')}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border py-2.5 text-sm font-semibold text-foreground"
               >
                 <VkIcon className="h-5 w-5" /> ВКонтакте

@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { reachGoal } from '@/lib/metrika'
 import {
   Truck,
   Check,
@@ -133,6 +134,12 @@ export function Calculator() {
       })
       if (!res.ok) throw new Error('bad')
       setStatus('sent')
+      reachGoal('quote_submit', {
+        mode,
+        vehicle,
+        isCompany,
+        total,
+      })
     } catch {
       setStatus('error')
       setErrorMsg('Не удалось отправить. Попробуйте ещё раз или позвоните нам.')
@@ -385,7 +392,10 @@ export function Calculator() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         type="button"
-                        onClick={() => setFormOpen(true)}
+                        onClick={() => {
+                          setFormOpen(true)
+                          reachGoal('calc_open', { total })
+                        }}
                         className={cn(
                           buttonVariants({ size: 'lg' }),
                           'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep',

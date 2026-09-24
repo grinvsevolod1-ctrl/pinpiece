@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { reachGoal } from '@/lib/metrika'
 import { Phone, Mail, MapPin, Clock, CheckCircle2, Building2, User, Loader2 } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
@@ -60,6 +61,7 @@ export function Contacts() {
       })
       if (!res.ok) throw new Error('bad')
       setStatus('sent')
+      reachGoal('contact_submit', { isCompany })
     } catch {
       setStatus('error')
       setErrorMsg('Не удалось отправить. Попробуйте ещё раз или позвоните нам.')
@@ -91,7 +93,13 @@ export function Contacts() {
                     <div>
                       <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.label}</div>
                       {c.href ? (
-                        <a href={c.href} className="font-bold text-foreground hover:text-brand">
+                        <a
+                          href={c.href}
+                          onClick={() =>
+                            reachGoal(c.href!.startsWith('tel:') ? 'phone_click' : 'email_click')
+                          }
+                          className="font-bold text-foreground hover:text-brand"
+                        >
                           {c.value}
                         </a>
                       ) : (
@@ -111,6 +119,7 @@ export function Contacts() {
                     href={SOCIALS.telegram}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => reachGoal('telegram_click')}
                     className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
                   >
                     <TelegramIcon className="h-5 w-5" /> Telegram
@@ -119,6 +128,7 @@ export function Contacts() {
                     href={SOCIALS.vk}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => reachGoal('vk_click')}
                     className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
                   >
                     <VkIcon className="h-5 w-5" /> ВКонтакте

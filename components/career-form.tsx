@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { reachGoal } from '@/lib/metrika'
 import { CheckCircle2, Loader2, Send, Wallet, GraduationCap, Clock } from 'lucide-react'
 
 const TELEGRAM_USERNAME = 'pinpiece'
@@ -76,6 +77,7 @@ export function CareerForm() {
 
     const url = buildTelegramUrl(data)
     setTgUrl(url)
+    reachGoal('career_submit', { position: data.position, license: data.license })
     // Open Telegram synchronously so the browser doesn't block the popup.
     const tgWindow = window.open(url, '_blank', 'noopener,noreferrer')
 
