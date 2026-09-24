@@ -8,8 +8,6 @@ import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
 import { CheckCircle2, Loader2, Send, Wallet, GraduationCap, Clock } from 'lucide-react'
 
-const TELEGRAM_USERNAME = 'pinpiece'
-
 const POSITIONS = [
   'Водитель кат. B (Газель / фургон)',
   'Водитель кат. C (5–10 т)',
@@ -32,24 +30,6 @@ export function CareerForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [ownCar, setOwnCar] = useState(false)
-  const [tgUrl, setTgUrl] = useState(`https://t.me/${TELEGRAM_USERNAME}`)
-
-  function buildTelegramUrl(data: Record<string, string>) {
-    const lines = [
-      'Здравствуйте! Хочу откликнуться на вакансию в PinPiece.',
-      '',
-      `Имя: ${data.name}`,
-      data.phone ? `Телефон: ${data.phone}` : '',
-      data.city ? `Город: ${data.city}` : '',
-      data.age ? `Возраст: ${data.age}` : '',
-      `Позиция: ${data.position}`,
-      `Опыт: ${data.experience}`,
-      `Категория прав: ${data.license}`,
-      `Свой автомобиль: ${data.ownCar}`,
-      data.comment ? `Комментарий: ${data.comment}` : '',
-    ].filter(Boolean)
-    return `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(lines.join('\n'))}`
-  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -75,12 +55,6 @@ export function CareerForm() {
       comment: String(fd.get('comment') ?? '').trim(),
     }
 
-    const url = buildTelegramUrl(data)
-    setTgUrl(url)
-    reachGoal('career_submit', { position: data.position, license: data.license })
-    // Open Telegram synchronously so the browser doesn't block the popup.
-    const tgWindow = window.open(url, '_blank', 'noopener,noreferrer')
-
     setStatus('loading')
     try {
       const res = await fetch('/api/lead', {
@@ -100,13 +74,11 @@ export function CareerForm() {
         }),
       })
       if (!res.ok) throw new Error('bad')
+      reachGoal('career_submit', { position: data.position, license: data.license })
       setStatus('sent')
-      if (!tgWindow) {
-        // Popup was blocked — navigate the current tab as a fallback.
-        window.location.href = url
-      }
     } catch {
-      setStatus('sent')
+      setStatus('error')
+      setErrorMsg('Не удалось отправить анкету. Попробуйте ещё раз чуть позже.')
     }
   }
 
@@ -116,24 +88,12 @@ export function CareerForm() {
         <CheckCircle2 className="h-14 w-14 text-signal" />
         <h3 className="mt-4 text-2xl font-bold text-foreground">Анкета отправлена</h3>
         <p className="mt-2 max-w-sm text-muted-foreground">
-          Мы уже открыли чат в Telegram с готовым сообщением — просто нажмите «Отправить» там, и рекрутёр
-          ответит быстрее. Если чат не открылся, нажмите кнопку ниже.
+          Спасибо! Рекрутёр свяжется с вами в ближайшее время, расскажет про условия и график работы.
         </p>
-        <a
-          href={tgUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            buttonVariants({ size: 'lg' }),
-            'mt-6 h-12 rounded-full bg-brand px-6 text-base font-semibold text-white hover:bg-brand-deep',
-          )}
-        >
-          <Send className="h-5 w-5" /> Написать в Telegram
-        </a>
         <button
           type="button"
           onClick={() => setStatus('idle')}
-          className="mt-4 text-sm font-semibold text-brand hover:underline"
+          className="mt-6 text-sm font-semibold text-brand hover:underline"
         >
           Отправить ещё одну анкету
         </button>
@@ -252,13 +212,12 @@ export function CareerForm() {
           </>
         ) : (
           <>
-            <Send className="h-5 w-5" /> Откликнуться и написать в Telegram
+            <Send className="h-5 w-5" /> Откликнуться
           </>
         )}
       </button>
       <p className="text-center text-xs text-muted-foreground">
-        После отправки откроется Telegram @{TELEGRAM_USERNAME} с готовым сообщением. Нажимая кнопку, вы
-        соглашаетесь с политикой обработки персональных данных.
+        Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
       </p>
     </form>
   )

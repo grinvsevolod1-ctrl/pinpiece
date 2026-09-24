@@ -14,7 +14,6 @@ export function StructuredData() {
         logo: `${SITE_URL}/og.png`,
         description:
           'Логистический центр грузоперевозок: доставка по городу, межгород и дальние рейсы, собственный автопарк, склад ответственного хранения.',
-        telephone: '+7-800-123-45-67',
         email: 'hello@pinpiece.ru',
         address: {
           '@type': 'PostalAddress',
@@ -23,7 +22,7 @@ export function StructuredData() {
           addressCountry: 'RU',
         },
         areaServed: 'RU',
-        sameAs: [],
+        sameAs: ['https://t.me/pinpiece', 'https://vk.com/arc.raiders'],
       },
       {
         '@type': 'MovingCompany',
@@ -31,7 +30,6 @@ export function StructuredData() {
         name: 'PinPiece',
         image: `${SITE_URL}/og.png`,
         url: SITE_URL,
-        telephone: '+7-800-123-45-67',
         priceRange: '₽₽',
         address: {
           '@type': 'PostalAddress',

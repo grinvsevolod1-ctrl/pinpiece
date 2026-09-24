@@ -74,10 +74,10 @@ export async function POST(req: Request) {
         }),
       })
     } catch (err) {
-      console.log('[v0] lead telegram delivery failed:', err)
+      console.error('[lead] telegram delivery failed:', err)
     }
   } else {
-    console.log('[v0] new lead received:', JSON.stringify(lead))
+    console.info('[lead] received:', JSON.stringify(lead))
   }
 
   return NextResponse.json({ ok: true })

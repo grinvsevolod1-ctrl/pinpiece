@@ -13,7 +13,6 @@ import {
   Clock,
   Fuel,
   CalendarCheck,
-  Phone,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -117,10 +116,10 @@ export default function VacanciesPage() {
                   Оставить анкету
                 </a>
                 <a
-                  href="tel:+78001234567"
+                  href="#positions"
                   className="inline-flex h-12 items-center gap-2 rounded-full border border-border px-6 text-base font-semibold text-foreground transition-colors hover:border-brand"
                 >
-                  <Phone className="h-4 w-4 text-brand" /> 8 800 123-45-67
+                  Смотреть вакансии
                 </a>
               </div>
             </Reveal>
@@ -128,7 +127,7 @@ export default function VacanciesPage() {
         </section>
 
         {/* Positions */}
-        <section className="py-16 lg:py-24">
+        <section id="positions" className="scroll-mt-24 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <Reveal>
               <span className="text-sm font-semibold uppercase tracking-widest text-brand">Открытые вакансии</span>

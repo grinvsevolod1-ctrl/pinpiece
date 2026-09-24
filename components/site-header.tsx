@@ -5,7 +5,7 @@ import { Logo } from './logo'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
-import { Menu, X, Phone } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const NAV = [
@@ -71,14 +71,6 @@ export function SiteHeader() {
               <VkIcon className="h-4.5 w-4.5" />
             </a>
           </div>
-          <a
-            href="tel:+78001234567"
-            onClick={() => reachGoal('phone_click')}
-            className="flex items-center gap-2 text-sm font-semibold text-foreground"
-          >
-            <Phone className="h-4 w-4 text-brand" />
-            8 800 123-45-67
-          </a>
           <a
             href="/#calc"
             className={cn(

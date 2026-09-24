@@ -2,7 +2,8 @@ import Image from 'next/image'
 import { Reveal } from './reveal'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Phone, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { SOCIALS, TelegramIcon } from './social-icons'
 
 export function Cta() {
   return (
@@ -39,11 +40,13 @@ export function Cta() {
                   <ArrowRight className="ml-1 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </a>
                 <a
-                  href="tel:+78001234567"
+                  href={SOCIALS.telegram}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 rounded-full border border-border bg-card/60 px-6 py-3.5 text-base font-semibold text-foreground backdrop-blur transition-colors hover:bg-card"
                 >
-                  <Phone className="h-5 w-5 text-brand" />
-                  8 800 123-45-67
+                  <TelegramIcon className="h-5 w-5 text-brand" />
+                  Написать в Telegram
                 </a>
               </div>
             </div>

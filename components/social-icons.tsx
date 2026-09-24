@@ -1,6 +1,6 @@
 export const SOCIALS = {
   telegram: 'https://t.me/pinpiece',
-  vk: 'https://vk.com/pinpiece',
+  vk: 'https://vk.com/arc.raiders',
 } as const
 
 export function TelegramIcon({ className }: { className?: string }) {

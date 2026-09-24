@@ -7,11 +7,10 @@ import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
-import { Phone, Mail, MapPin, Clock, CheckCircle2, Building2, User, Loader2 } from 'lucide-react'
+import { Mail, MapPin, Clock, CheckCircle2, Building2, User, Loader2 } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const CONTACTS = [
-  { icon: Phone, label: 'Телефон', value: '8 800 123-45-67', href: 'tel:+78001234567' },
   { icon: Mail, label: 'Почта', value: 'hello@pinpiece.ru', href: 'mailto:hello@pinpiece.ru' },
   { icon: MapPin, label: 'Адрес хаба', value: 'Москва, ул. Логистическая, 1', href: null },
   { icon: Clock, label: 'Режим работы', value: 'Диспетчерская 24/7', href: null },
@@ -95,9 +94,7 @@ export function Contacts() {
                       {c.href ? (
                         <a
                           href={c.href}
-                          onClick={() =>
-                            reachGoal(c.href!.startsWith('tel:') ? 'phone_click' : 'email_click')
-                          }
+                          onClick={() => reachGoal('email_click')}
                           className="font-bold text-foreground hover:text-brand"
                         >
                           {c.value}

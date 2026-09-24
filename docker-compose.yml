@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pinpiece-web
+    container_name: pinpiece-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      # Опционально: доставка заявок в Telegram-бот.
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      # Переопределить счётчик Метрики при необходимости (по умолчанию 112993063).
+      NEXT_PUBLIC_YM_ID: ${NEXT_PUBLIC_YM_ID:-}

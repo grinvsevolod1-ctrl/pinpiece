@@ -1,5 +1,5 @@
 import { Logo } from './logo'
-import { Phone, Mail, MapPin } from 'lucide-react'
+import { Mail, MapPin } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const COLS = [
@@ -46,9 +46,6 @@ export function SiteFooter() {
               дальние рейсы с собственным автопарком.
             </p>
             <div className="mt-6 space-y-3 text-sm">
-              <a href="tel:+78001234567" className="flex items-center gap-2 text-foreground">
-                <Phone className="h-4 w-4 text-brand" /> 8 800 123-45-67
-              </a>
               <a href="mailto:hello@pinpiece.ru" className="flex items-center gap-2 text-foreground">
                 <Mail className="h-4 w-4 text-brand" /> hello@pinpiece.ru
               </a>

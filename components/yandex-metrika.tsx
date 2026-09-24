@@ -32,11 +32,12 @@ export function YandexMetrika() {
           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
           ym(${YM_ID}, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
+            ssr:true,
             webvisor:true,
-            defer:true
+            clickmap:true,
+            ecommerce:"dataLayer",
+            accurateTrackBounce:true,
+            trackLinks:true
           });
         `}
       </Script>

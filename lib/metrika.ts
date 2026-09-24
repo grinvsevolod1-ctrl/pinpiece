@@ -1,7 +1,7 @@
 // Yandex Metrika helper — счётчик и цели-конверсии для Яндекс.Директа.
-// ID счётчика берётся из переменной окружения NEXT_PUBLIC_YM_ID.
+// ID счётчика можно переопределить через NEXT_PUBLIC_YM_ID, иначе используется рабочий.
 
-export const YM_ID = process.env.NEXT_PUBLIC_YM_ID
+export const YM_ID = process.env.NEXT_PUBLIC_YM_ID ?? '112993063'
 
 declare global {
   interface Window {
