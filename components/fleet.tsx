@@ -32,6 +32,7 @@ export function Fleet() {
                 src="/truck-semi.png"
                 alt="Магистральная фура PinPiece"
                 fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
@@ -56,6 +57,7 @@ export function Fleet() {
                   src="/van-city.png"
                   alt="Городской фургон PinPiece"
                   fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />

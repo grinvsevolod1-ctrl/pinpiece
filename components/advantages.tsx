@@ -22,6 +22,7 @@ export function Advantages() {
                 src="/hub-aerial.png"
                 alt="Логистический хаб PinPiece с высоты"
                 fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />

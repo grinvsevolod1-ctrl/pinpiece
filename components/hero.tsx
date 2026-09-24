@@ -29,6 +29,7 @@ export function Hero() {
           alt="Автопарк PinPiece на трассе"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
       </motion.div>

@@ -15,6 +15,7 @@ export function Cta() {
               src="/cargo-loading.png"
               alt="Погрузка груза на складе PinPiece"
               fill
+              sizes="(min-width: 1280px) 1280px, 100vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
