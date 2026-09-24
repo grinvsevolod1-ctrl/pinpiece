@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import { YandexMetrika } from '@/components/yandex-metrika'
+import { FloatingCta } from '@/components/floating-cta'
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -95,6 +96,7 @@ export default function RootLayout({
     <html lang="ru" className={manrope.variable}>
       <body className="antialiased font-sans">
         {children}
+        <FloatingCta />
         <YandexMetrika />
       </body>
     </html>

@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { reachGoal } from '@/lib/metrika'
+import { SOCIALS, TelegramIcon } from './social-icons'
 import { ArrowRight, MapPin, ShieldCheck, Truck } from 'lucide-react'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -105,6 +107,18 @@ export function Hero() {
             )}
           >
             Смотреть услуги
+          </a>
+          <a
+            href={SOCIALS.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => reachGoal('telegram_click')}
+            className="group inline-flex items-center gap-2 text-base font-semibold text-foreground/90 transition-colors hover:text-brand"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card/40 backdrop-blur transition-colors group-hover:border-brand">
+              <TelegramIcon className="h-5 w-5 text-brand" />
+            </span>
+            Задать вопрос онлайн
           </a>
         </motion.div>
 

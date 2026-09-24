@@ -46,7 +46,7 @@ export function Cta() {
                   className="flex items-center justify-center gap-2 rounded-full border border-border bg-card/60 px-6 py-3.5 text-base font-semibold text-foreground backdrop-blur transition-colors hover:bg-card"
                 >
                   <TelegramIcon className="h-5 w-5 text-brand" />
-                  Написать в Telegram
+                  Получить консультацию
                 </a>
               </div>
             </div>
