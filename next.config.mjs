@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Self-contained build for VPS/Docker deployment (.next/standalone).
-  output: 'standalone',
   poweredByHeader: false,
   typescript: {
     ignoreBuildErrors: true,
