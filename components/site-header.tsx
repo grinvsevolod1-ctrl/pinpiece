@@ -41,6 +41,7 @@ export function SiteHeader() {
             <a
               key={item.href}
               href={item.href}
+              onClick={() => item.href === '/vacancies' && reachGoal('vacancies_open')}
               className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
@@ -73,6 +74,7 @@ export function SiteHeader() {
           </div>
           <a
             href="/#calc"
+            onClick={() => reachGoal('calc_start')}
             className={cn(
               buttonVariants(),
               'h-10 rounded-full bg-brand px-5 font-semibold text-white hover:bg-brand-deep',
@@ -99,7 +101,10 @@ export function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  if (item.href === '/vacancies') reachGoal('vacancies_open')
+                  setOpen(false)
+                }}
                 className="border-b border-border/60 py-3 text-base font-medium text-foreground/90"
               >
                 {item.label}
@@ -107,7 +112,10 @@ export function SiteHeader() {
             ))}
             <a
               href="/#calc"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                reachGoal('calc_start')
+                setOpen(false)
+              }}
               className={cn(
                 buttonVariants(),
                 'mt-4 h-11 rounded-full bg-brand font-semibold text-white hover:bg-brand-deep',

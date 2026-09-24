@@ -91,6 +91,7 @@ export function Hero() {
         >
           <a
             href="#calc"
+            onClick={() => reachGoal('calc_start')}
             className={cn(
               buttonVariants({ size: 'lg' }),
               'group h-13 rounded-full bg-brand px-7 text-base font-semibold text-white hover:bg-brand-deep',
