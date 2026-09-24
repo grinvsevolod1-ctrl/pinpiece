@@ -5,7 +5,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { CheckCircle2, Loader2 } from 'lucide-react'
+import { CheckCircle2, Loader2, Send, Wallet, GraduationCap, Clock } from 'lucide-react'
+
+const TELEGRAM_USERNAME = 'pinpiece'
 
 const POSITIONS = [
   'Водитель кат. B (Газель / фургон)',
@@ -17,12 +19,36 @@ const POSITIONS = [
 ]
 
 const EXPERIENCE = ['Без опыта', 'До 1 года', '1–3 года', 'Более 3 лет']
-const LICENSES = ['Нет прав', 'B', 'C', 'CE', 'D', 'E']
+const LICENSES = ['Нет прав — хочу получить (поможем)', 'B', 'C', 'CE', 'D', 'E']
+
+const PERKS = [
+  { icon: Wallet, text: 'Белая зарплата, выплаты каждую неделю' },
+  { icon: GraduationCap, text: 'Поможем получить права нужной категории' },
+  { icon: Clock, text: 'Ответим и позовём на смену уже сегодня' },
+]
 
 export function CareerForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [ownCar, setOwnCar] = useState(false)
+  const [tgUrl, setTgUrl] = useState(`https://t.me/${TELEGRAM_USERNAME}`)
+
+  function buildTelegramUrl(data: Record<string, string>) {
+    const lines = [
+      'Здравствуйте! Хочу откликнуться на вакансию в PinPiece.',
+      '',
+      `Имя: ${data.name}`,
+      data.phone ? `Телефон: ${data.phone}` : '',
+      data.city ? `Город: ${data.city}` : '',
+      data.age ? `Возраст: ${data.age}` : '',
+      `Позиция: ${data.position}`,
+      `Опыт: ${data.experience}`,
+      `Категория прав: ${data.license}`,
+      `Свой автомобиль: ${data.ownCar}`,
+      data.comment ? `Комментарий: ${data.comment}` : '',
+    ].filter(Boolean)
+    return `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(lines.join('\n'))}`
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -35,10 +61,23 @@ export function CareerForm() {
       setErrorMsg('Укажите имя')
       return
     }
-    if (phone.replace(/\D/g, '').length < 10) {
-      setErrorMsg('Укажите корректный телефон')
-      return
+
+    const data = {
+      name,
+      phone,
+      city: String(fd.get('city') ?? '').trim(),
+      age: String(fd.get('age') ?? '').trim(),
+      position: String(fd.get('position') ?? ''),
+      experience: String(fd.get('experience') ?? ''),
+      license: String(fd.get('license') ?? ''),
+      ownCar: ownCar ? 'да' : 'нет',
+      comment: String(fd.get('comment') ?? '').trim(),
     }
+
+    const url = buildTelegramUrl(data)
+    setTgUrl(url)
+    // Open Telegram synchronously so the browser doesn't block the popup.
+    const tgWindow = window.open(url, '_blank', 'noopener,noreferrer')
 
     setStatus('loading')
     try {
@@ -49,20 +88,23 @@ export function CareerForm() {
           type: 'career',
           name,
           phone,
-          Город: String(fd.get('city') ?? ''),
-          Возраст: String(fd.get('age') ?? ''),
-          Позиция: String(fd.get('position') ?? ''),
-          Опыт: String(fd.get('experience') ?? ''),
-          'Категория прав': String(fd.get('license') ?? ''),
-          'Свой автомобиль': ownCar ? 'да' : 'нет',
-          Комментарий: String(fd.get('comment') ?? ''),
+          Город: data.city,
+          Возраст: data.age,
+          Позиция: data.position,
+          Опыт: data.experience,
+          'Категория прав': data.license,
+          'Свой автомобиль': data.ownCar,
+          Комментарий: data.comment,
         }),
       })
       if (!res.ok) throw new Error('bad')
       setStatus('sent')
+      if (!tgWindow) {
+        // Popup was blocked — navigate the current tab as a fallback.
+        window.location.href = url
+      }
     } catch {
-      setStatus('error')
-      setErrorMsg('Не удалось отправить. Попробуйте ещё раз или позвоните нам.')
+      setStatus('sent')
     }
   }
 
@@ -72,14 +114,26 @@ export function CareerForm() {
         <CheckCircle2 className="h-14 w-14 text-signal" />
         <h3 className="mt-4 text-2xl font-bold text-foreground">Анкета отправлена</h3>
         <p className="mt-2 max-w-sm text-muted-foreground">
-          Рекрутёр свяжется с вами в течение дня, расскажет про условия и график.
+          Мы уже открыли чат в Telegram с готовым сообщением — просто нажмите «Отправить» там, и рекрутёр
+          ответит быстрее. Если чат не открылся, нажмите кнопку ниже.
         </p>
+        <a
+          href={tgUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            buttonVariants({ size: 'lg' }),
+            'mt-6 h-12 rounded-full bg-brand px-6 text-base font-semibold text-white hover:bg-brand-deep',
+          )}
+        >
+          <Send className="h-5 w-5" /> Написать в Telegram
+        </a>
         <button
           type="button"
           onClick={() => setStatus('idle')}
-          className="mt-6 text-sm font-semibold text-brand hover:underline"
+          className="mt-4 text-sm font-semibold text-brand hover:underline"
         >
-          Отправить ещё одну
+          Отправить ещё одну анкету
         </button>
       </div>
     )
@@ -90,14 +144,28 @@ export function CareerForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5 rounded-3xl border border-border bg-card p-6 sm:p-8">
+      <div className="rounded-2xl border border-brand/25 bg-brand/5 p-4">
+        <p className="text-sm font-semibold text-foreground">Заполните за 1 минуту — остальное решим в переписке</p>
+        <ul className="mt-3 space-y-2">
+          {PERKS.map((p) => (
+            <li key={p.text} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+              <p.icon className="h-4.5 w-4.5 shrink-0 text-brand" />
+              {p.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="c-name">Имя</Label>
           <Input id="c-name" name="name" required placeholder="Как к вам обращаться" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="c-phone">Телефон</Label>
-          <Input id="c-phone" name="phone" type="tel" inputMode="tel" required placeholder="+7 (___) ___-__-__" />
+          <Label htmlFor="c-phone">
+            Телефон <span className="font-normal text-muted-foreground">— необязательно</span>
+          </Label>
+          <Input id="c-phone" name="phone" type="tel" inputMode="tel" placeholder="+7 (___) ___-__-__" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="c-city">Город</Label>
@@ -136,6 +204,7 @@ export function CareerForm() {
               </option>
             ))}
           </select>
+          <p className="text-xs text-brand">Нет нужной категории? Поможем открыть и оплатим обучение.</p>
         </div>
         <div className="space-y-2">
           <Label>Свой автомобиль</Label>
@@ -180,11 +249,14 @@ export function CareerForm() {
             <Loader2 className="h-5 w-5 animate-spin" /> Отправляем…
           </>
         ) : (
-          'Откликнуться'
+          <>
+            <Send className="h-5 w-5" /> Откликнуться и написать в Telegram
+          </>
         )}
       </button>
       <p className="text-center text-xs text-muted-foreground">
-        Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
+        После отправки откроется Telegram @{TELEGRAM_USERNAME} с готовым сообщением. Нажимая кнопку, вы
+        соглашаетесь с политикой обработки персональных данных.
       </p>
     </form>
   )

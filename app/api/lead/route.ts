@@ -35,7 +35,13 @@ export async function POST(req: Request) {
   if (name.length < 2) {
     return NextResponse.json({ ok: false, error: 'name_required' }, { status: 422 })
   }
-  if (!isValidPhone(phone)) {
+  // Phone is optional for career applications (candidates may reach us via Telegram),
+  // but required for quote/contact leads. When provided, it must be valid.
+  if (data.type === 'career') {
+    if (phone && !isValidPhone(phone)) {
+      return NextResponse.json({ ok: false, error: 'phone_invalid' }, { status: 422 })
+    }
+  } else if (!isValidPhone(phone)) {
     return NextResponse.json({ ok: false, error: 'phone_invalid' }, { status: 422 })
   }
   if (data.isCompany) {
@@ -87,7 +93,7 @@ function formatLead(lead: LeadPayload & { receivedAt: string }): string {
         : '📩 Заявка с сайта'
   lines.push(`<b>${heading}</b>`)
   lines.push(`Имя: ${lead.name}`)
-  lines.push(`Телефон: ${lead.phone}`)
+  if (lead.phone) lines.push(`Телефон: ${lead.phone}`)
   if (lead.isCompany) {
     lines.push(`Компания: ${lead.company ?? '—'}`)
     lines.push(`УНП/ИНН: ${lead.unp ?? '—'}`)
