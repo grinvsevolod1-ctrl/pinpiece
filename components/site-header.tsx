@@ -39,14 +39,14 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 lg:flex">
           {NAV.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               onClick={() => item.href === '/vacancies' && reachGoal('vacancies_open')}
               className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -73,7 +73,7 @@ export function SiteHeader() {
               <VkIcon className="h-4.5 w-4.5" />
             </a>
           </div>
-          <a
+          <Link
             href="/#calc"
             onClick={() => reachGoal('calc_start')}
             className={cn(
@@ -82,24 +82,26 @@ export function SiteHeader() {
             )}
           >
             Рассчитать
-          </a>
+          </Link>
         </div>
 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="grid h-10 w-10 place-items-center rounded-lg border border-border text-foreground lg:hidden"
-          aria-label="Меню"
+          aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden">
+        <div id="mobile-nav" className="border-t border-border bg-background/95 backdrop-blur-xl lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-5 py-4">
             {NAV.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => {
@@ -109,9 +111,9 @@ export function SiteHeader() {
                 className="border-b border-border/60 py-3 text-base font-medium text-foreground/90"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/#calc"
               onClick={() => {
                 reachGoal('calc_start')
@@ -123,7 +125,7 @@ export function SiteHeader() {
               )}
             >
               Рассчитать стоимость
-            </a>
+            </Link>
             <div className="mt-4 flex gap-3">
               <a
                 href={SOCIALS.telegram}

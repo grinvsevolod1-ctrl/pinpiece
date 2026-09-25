@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { buttonVariants } from '@/components/ui/button'
@@ -25,7 +26,7 @@ export default function NotFound() {
             стоимость перевозки.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a
+            <Link
               href="/"
               className={cn(
                 buttonVariants({ size: 'lg' }),
@@ -33,8 +34,8 @@ export default function NotFound() {
               )}
             >
               <ArrowLeft className="h-5 w-5" /> На главную
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#calc"
               className={cn(
                 buttonVariants({ size: 'lg', variant: 'outline' }),
@@ -42,7 +43,7 @@ export default function NotFound() {
               )}
             >
               <Calculator className="h-5 w-5" /> Рассчитать стоимость
-            </a>
+            </Link>
           </div>
         </div>
       </main>

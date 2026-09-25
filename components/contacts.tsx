@@ -5,6 +5,7 @@ import { Reveal } from './reveal'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
 import { submitLead, type LeadResult } from '@/lib/lead'
@@ -220,7 +221,11 @@ export function Contacts() {
                   </button>
                   <p className="text-center text-xs text-muted-foreground">
                     Откроется чат с менеджером с готовым текстом заявки — останется нажать «Отправить». Нажимая
-                    кнопку, вы соглашаетесь с политикой обработки персональных данных.
+                    кнопку, вы соглашаетесь с{' '}
+                    <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+                      политикой обработки персональных данных
+                    </Link>
+                    .
                   </p>
                 </form>
               )}
