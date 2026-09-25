@@ -67,8 +67,11 @@ export async function POST(req: Request) {
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
   if (token && chatId) {
+    // Жёсткий таймаут: на серверах, где api.telegram.org недоступен (частая
+    // блокировка на российских VPS), fetch без таймаута висит до системного
+    // TCP-таймаута на каждый адрес (IPv6+IPv4) и копит зависшие соединения.
     try {
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,9 +79,17 @@ export async function POST(req: Request) {
           parse_mode: 'HTML',
           text: formatLead(lead),
         }),
+        signal: AbortSignal.timeout(5000),
       })
+      if (!res.ok) {
+        console.error(`[lead] telegram delivery failed: HTTP ${res.status}`)
+        // Лид не теряем: пишем его в лог сервера как запасной канал.
+        console.info('[lead] received:', JSON.stringify(lead))
+      }
     } catch (err) {
-      console.error('[lead] telegram delivery failed:', err)
+      const reason = err instanceof Error ? err.message : String(err)
+      console.error(`[lead] telegram unreachable (${reason}); logging lead instead`)
+      console.info('[lead] received:', JSON.stringify(lead))
     }
   } else {
     console.info('[lead] received:', JSON.stringify(lead))
