@@ -1,5 +1,7 @@
+import { TELEGRAM_URL } from '@/lib/telegram'
+
 export const SOCIALS = {
-  telegram: 'https://t.me/pinpiece',
+  telegram: TELEGRAM_URL,
   vk: 'https://vk.com/arc.raiders',
 } as const
 

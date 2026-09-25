@@ -7,7 +7,10 @@ import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
-import { Mail, MapPin, Clock, CheckCircle2, Building2, User, Loader2 } from 'lucide-react'
+import { submitLead, type LeadResult } from '@/lib/lead'
+import { formatContactMessage } from '@/lib/telegram'
+import { LeadSent } from './lead-sent'
+import { Mail, MapPin, Clock, Building2, User } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
 
 const CONTACTS = [
@@ -18,16 +21,19 @@ const CONTACTS = [
 
 export function Contacts() {
   const [isCompany, setIsCompany] = useState(false)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
+  const [result, setResult] = useState<LeadResult | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setErrorMsg('')
     const fd = new FormData(e.currentTarget)
     const name = String(fd.get('name') ?? '').trim()
     const phone = String(fd.get('phone') ?? '').trim()
+    const company = String(fd.get('company') ?? '').trim()
     const unp = String(fd.get('unp') ?? '').trim()
+    const route = String(fd.get('route') ?? '').trim()
+    const cargo = String(fd.get('cargo') ?? '').trim()
 
     if (name.length < 2) {
       setErrorMsg('Укажите имя')
@@ -42,29 +48,33 @@ export function Contacts() {
       return
     }
 
-    setStatus('loading')
-    try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'contact',
+    const lead = {
+      name,
+      phone,
+      isCompany,
+      company: isCompany ? company : undefined,
+      unp: isCompany ? unp : undefined,
+      route,
+      cargo,
+    }
+
+    setResult(
+      submitLead({
+        type: 'contact',
+        text: formatContactMessage(lead),
+        payload: {
           name,
           phone,
           isCompany,
-          company: isCompany ? String(fd.get('company') ?? '') : undefined,
-          unp: isCompany ? unp : undefined,
-          Маршрут: String(fd.get('route') ?? ''),
-          Груз: String(fd.get('cargo') ?? ''),
-        }),
-      })
-      if (!res.ok) throw new Error('bad')
-      setStatus('sent')
-      reachGoal('contact_submit', { isCompany })
-    } catch {
-      setStatus('error')
-      setErrorMsg('Не удалось отправить. Попробуйте ещё раз или позвоните нам.')
-    }
+          company: lead.company,
+          unp: lead.unp,
+          Маршрут: route,
+          Груз: cargo,
+        },
+        goal: 'contact_submit',
+        goalParams: { isCompany },
+      }),
+    )
   }
 
   return (
@@ -78,7 +88,8 @@ export function Contacts() {
                 Оставьте заявку — перезвоним за 15 минут
               </h2>
               <p className="mt-4 max-w-md text-lg text-muted-foreground">
-                Расскажите про груз и маршрут. Менеджер рассчитает стоимость и подберёт машину.
+                Расскажите про груз и маршрут — мы соберём заявку в сообщение и откроем чат с менеджером в
+                Telegram. Он рассчитает стоимость и подберёт машину.
               </p>
             </Reveal>
 
@@ -137,21 +148,8 @@ export function Contacts() {
 
           <Reveal delay={0.1}>
             <div className="rounded-3xl border border-border bg-card p-6 sm:p-8">
-              {status === 'sent' ? (
-                <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
-                  <CheckCircle2 className="h-14 w-14 text-signal" />
-                  <h3 className="mt-4 text-2xl font-bold text-foreground">Заявка отправлена</h3>
-                  <p className="mt-2 max-w-xs text-muted-foreground">
-                    Менеджер свяжется с вами в течение 15 минут в рабочее время.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setStatus('idle')}
-                    className="mt-6 text-sm font-semibold text-brand hover:underline"
-                  >
-                    Отправить ещё одну
-                  </button>
-                </div>
+              {result ? (
+                <LeadSent result={result} title="Заявка готова" onReset={() => setResult(null)} />
               ) : (
                 <form onSubmit={onSubmit} className="space-y-5">
                   <div className="grid grid-cols-2 gap-2 rounded-xl border border-border bg-background/50 p-1">
@@ -213,22 +211,16 @@ export function Contacts() {
 
                   <button
                     type="submit"
-                    disabled={status === 'loading'}
                     className={cn(
                       buttonVariants({ size: 'lg' }),
-                      'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep disabled:opacity-70',
+                      'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep',
                     )}
                   >
-                    {status === 'loading' ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" /> Отправляем…
-                      </>
-                    ) : (
-                      'Отправить заявку'
-                    )}
+                    <TelegramIcon className="h-5 w-5" /> Отправить в Telegram
                   </button>
                   <p className="text-center text-xs text-muted-foreground">
-                    Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
+                    Откроется чат с менеджером с готовым текстом заявки — останется нажать «Отправить». Нажимая
+                    кнопку, вы соглашаетесь с политикой обработки персональных данных.
                   </p>
                 </form>
               )}
