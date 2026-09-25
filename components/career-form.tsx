@@ -5,8 +5,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { reachGoal } from '@/lib/metrika'
-import { CheckCircle2, Loader2, Send, Wallet, GraduationCap, Clock } from 'lucide-react'
+import { submitLead, type LeadResult } from '@/lib/lead'
+import { formatCareerMessage } from '@/lib/telegram'
+import { LeadSent } from './lead-sent'
+import { TelegramIcon } from './social-icons'
+import { Wallet, GraduationCap, Clock } from 'lucide-react'
 
 const POSITIONS = [
   'Водитель кат. B (Газель / фургон)',
@@ -27,11 +30,11 @@ const PERKS = [
 ]
 
 export function CareerForm() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
+  const [result, setResult] = useState<LeadResult | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
   const [ownCar, setOwnCar] = useState(false)
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setErrorMsg('')
     const fd = new FormData(e.currentTarget)
@@ -42,8 +45,12 @@ export function CareerForm() {
       setErrorMsg('Укажите имя')
       return
     }
+    if (phone && phone.replace(/\D/g, '').length < 10) {
+      setErrorMsg('Укажите корректный телефон или оставьте поле пустым')
+      return
+    }
 
-    const data = {
+    const lead = {
       name,
       phone,
       city: String(fd.get('city') ?? '').trim(),
@@ -51,52 +58,40 @@ export function CareerForm() {
       position: String(fd.get('position') ?? ''),
       experience: String(fd.get('experience') ?? ''),
       license: String(fd.get('license') ?? ''),
-      ownCar: ownCar ? 'да' : 'нет',
+      ownCar,
       comment: String(fd.get('comment') ?? '').trim(),
     }
 
-    setStatus('loading')
-    try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'career',
+    setResult(
+      submitLead({
+        type: 'career',
+        text: formatCareerMessage(lead),
+        payload: {
           name,
           phone,
-          Город: data.city,
-          Возраст: data.age,
-          Позиция: data.position,
-          Опыт: data.experience,
-          'Категория прав': data.license,
-          'Свой автомобиль': data.ownCar,
-          Комментарий: data.comment,
-        }),
-      })
-      if (!res.ok) throw new Error('bad')
-      reachGoal('career_submit', { position: data.position, license: data.license })
-      setStatus('sent')
-    } catch {
-      setStatus('error')
-      setErrorMsg('Не удалось отправить анкету. Попробуйте ещё раз чуть позже.')
-    }
+          Город: lead.city,
+          Возраст: lead.age,
+          Позиция: lead.position,
+          Опыт: lead.experience,
+          'Категория прав': lead.license,
+          'Свой автомобиль': ownCar ? 'да' : 'нет',
+          Комментарий: lead.comment,
+        },
+        goal: 'career_submit',
+        goalParams: { position: lead.position, license: lead.license },
+      }),
+    )
   }
 
-  if (status === 'sent') {
+  if (result) {
     return (
-      <div className="flex min-h-96 flex-col items-center justify-center rounded-3xl border border-border bg-card p-8 text-center">
-        <CheckCircle2 className="h-14 w-14 text-signal" />
-        <h3 className="mt-4 text-2xl font-bold text-foreground">Анкета отправлена</h3>
-        <p className="mt-2 max-w-sm text-muted-foreground">
-          Спасибо! Рекрутёр свяжется с вами в ближайшее время, расскажет про условия и график работы.
-        </p>
-        <button
-          type="button"
-          onClick={() => setStatus('idle')}
-          className="mt-6 text-sm font-semibold text-brand hover:underline"
-        >
-          Отправить ещё одну анкету
-        </button>
+      <div className="flex min-h-96 flex-col justify-center rounded-3xl border border-border bg-card p-8">
+        <LeadSent
+          result={result}
+          title="Анкета готова"
+          resetLabel="Заполнить ещё одну анкету"
+          onReset={() => setResult(null)}
+        />
       </div>
     )
   }
@@ -200,24 +195,16 @@ export function CareerForm() {
 
       <button
         type="submit"
-        disabled={status === 'loading'}
         className={cn(
           buttonVariants({ size: 'lg' }),
-          'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep disabled:opacity-70',
+          'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep',
         )}
       >
-        {status === 'loading' ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin" /> Отправляем…
-          </>
-        ) : (
-          <>
-            <Send className="h-5 w-5" /> Откликнуться
-          </>
-        )}
+        <TelegramIcon className="h-5 w-5" /> Откликнуться в Telegram
       </button>
       <p className="text-center text-xs text-muted-foreground">
-        Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
+        Откроется чат с рекрутёром с готовой анкетой — останется нажать «Отправить». Нажимая кнопку, вы соглашаетесь с
+        политикой обработки персональных данных.
       </p>
     </form>
   )

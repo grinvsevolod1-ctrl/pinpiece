@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server'
 
+// Резервный канал. Основной сценарий — формы открывают Telegram с готовым текстом
+// (см. lib/lead.ts); сюда данные дублируются в фоне, чтобы лид не потерялся,
+// даже если сообщение в Telegram не отправят. Доставка в бота включается
+// переменными TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID, иначе — лог сервера.
 export const runtime = 'nodejs'
 
 type LeadPayload = {

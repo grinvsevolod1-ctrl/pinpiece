@@ -7,17 +7,11 @@ import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { reachGoal } from '@/lib/metrika'
-import {
-  Truck,
-  Check,
-  Calculator as CalcIcon,
-  Users,
-  Zap,
-  RefreshCw,
-  Building2,
-  User,
-  Loader2,
-} from 'lucide-react'
+import { submitLead, type LeadResult } from '@/lib/lead'
+import { formatQuoteMessage } from '@/lib/telegram'
+import { LeadSent } from './lead-sent'
+import { TelegramIcon } from './social-icons'
+import { Truck, Calculator as CalcIcon, Users, Zap, RefreshCw, Building2, User } from 'lucide-react'
 
 type Mode = 'city' | 'intercity'
 
@@ -57,7 +51,7 @@ export function Calculator() {
   const [phone, setPhone] = useState('')
   const [company, setCompany] = useState('')
   const [unp, setUnp] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
+  const [result, setResult] = useState<LeadResult | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
 
   const { total, lines } = useMemo(() => {
@@ -99,7 +93,7 @@ export function Calculator() {
     return { total: subtotal, lines: result }
   }, [mode, vehicle, distance, weight, loaders, hydro, urgent, roundTrip])
 
-  async function submit() {
+  function submit() {
     setErrorMsg('')
     if (name.trim().length < 2) {
       setErrorMsg('Укажите имя')
@@ -113,40 +107,49 @@ export function Calculator() {
       setErrorMsg('Укажите УНП / ИНН (мин. 9 цифр)')
       return
     }
-    setStatus('loading')
-    try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'quote',
-          name,
-          phone,
+
+    const extras = [hydro && 'гидроборт', urgent && 'срочная подача', roundTrip && 'туда-обратно'].filter(
+      (x): x is string => Boolean(x),
+    )
+    const lead = {
+      name: name.trim(),
+      phone: phone.trim(),
+      isCompany,
+      company: isCompany ? company.trim() : undefined,
+      unp: isCompany ? unp.trim() : undefined,
+      mode: mode === 'city' ? 'По городу' : 'Межгород',
+      vehicle: VEHICLES.find((v) => v.id === vehicle)?.name ?? vehicle,
+      route: `${from.trim() || '—'} → ${to.trim() || '—'}`,
+      distanceKm: distance,
+      weightKg: weight,
+      loaders,
+      extras,
+      estimate: usd(total),
+    }
+
+    setResult(
+      submitLead({
+        type: 'quote',
+        text: formatQuoteMessage(lead),
+        payload: {
+          name: lead.name,
+          phone: lead.phone,
           isCompany,
-          company: isCompany ? company : undefined,
-          unp: isCompany ? unp : undefined,
-          Тип: isCompany ? 'Юр. лицо' : 'Физ. лицо',
-          Режим: mode === 'city' ? 'По городу' : 'Межгород',
-          Транспорт: VEHICLES.find((v) => v.id === vehicle)?.name,
-          Маршрут: `${from || '—'} → ${to || '—'}`,
+          company: lead.company,
+          unp: lead.unp,
+          Режим: lead.mode,
+          Транспорт: lead.vehicle,
+          Маршрут: lead.route,
           Расстояние: `${distance} км`,
           Вес: `${weight} кг`,
           Грузчики: loaders,
-          Оценка: usd(total),
-        }),
-      })
-      if (!res.ok) throw new Error('bad')
-      setStatus('sent')
-      reachGoal('quote_submit', {
-        mode,
-        vehicle,
-        isCompany,
-        total,
-      })
-    } catch {
-      setStatus('error')
-      setErrorMsg('Не удалось отправить. Попробуйте ещё раз или позвоните нам.')
-    }
+          Дополнительно: extras.join(', '),
+          Оценка: lead.estimate,
+        },
+        goal: 'quote_submit',
+        goalParams: { mode, vehicle, isCompany, total },
+      }),
+    )
   }
 
   return (
@@ -311,20 +314,15 @@ export function Calculator() {
 
                 <div className="mt-auto pt-6">
                   <AnimatePresence mode="wait">
-                    {status === 'sent' ? (
-                      <motion.div
-                        key="sent"
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center gap-3 rounded-2xl border border-signal/40 bg-signal/10 p-4"
-                      >
-                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-signal-ink">
-                          <Check className="h-5 w-5" />
-                        </span>
-                        <div className="text-sm">
-                          <div className="font-bold text-foreground">Заявка отправлена</div>
-                          <div className="text-muted-foreground">Перезвоним в течение 15 минут</div>
-                        </div>
+                    {result ? (
+                      <motion.div key="sent" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                        <LeadSent
+                          compact
+                          result={result}
+                          title="Заявка готова"
+                          resetLabel="Изменить заявку"
+                          onReset={() => setResult(null)}
+                        />
                       </motion.div>
                     ) : formOpen ? (
                       <motion.div
@@ -371,22 +369,16 @@ export function Calculator() {
                         <button
                           type="button"
                           onClick={submit}
-                          disabled={status === 'loading'}
                           className={cn(
                             buttonVariants({ size: 'lg' }),
-                            'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep disabled:opacity-70',
+                            'h-13 w-full rounded-full bg-brand text-base font-semibold text-white hover:bg-brand-deep',
                           )}
                         >
-                          {status === 'loading' ? (
-                            <>
-                              <Loader2 className="h-5 w-5 animate-spin" /> Отправляем…
-                            </>
-                          ) : (
-                            'Отправить заявку'
-                          )}
+                          <TelegramIcon className="h-5 w-5" /> Отправить в Telegram
                         </button>
                         <p className="text-center text-[11px] leading-snug text-muted-foreground">
-                          Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.
+                          Откроется чат с менеджером с готовым расчётом. Нажимая кнопку, вы соглашаетесь с политикой
+                          обработки персональных данных.
                         </p>
                       </motion.div>
                     ) : (
