@@ -3,6 +3,10 @@
 
 export const YM_ID = process.env.NEXT_PUBLIC_YM_ID ?? '112993063'
 
+// Персональная сборка tag.js: настройки счётчика вшиты в скрипт. Общий tag.js без ?id=
+// при ssr:true молча игнорирует init, и счётчик не создаётся вовсе.
+export const YM_TAG_SRC = `https://mc.yandex.ru/metrika/tag.js?id=${YM_ID}`
+
 declare global {
   interface Window {
     ym?: (
@@ -31,8 +35,17 @@ export function reachGoal(goal: YmGoal, params?: Record<string, unknown>) {
   window.ym(Number(YM_ID), 'reachGoal', goal, params)
 }
 
-/** Зафиксировать просмотр страницы (для SPA-переходов в App Router). */
-export function hit(url: string) {
+export interface YmHitOptions {
+  title?: string
+  referer?: string
+  params?: Record<string, unknown>
+}
+
+/**
+ * Зафиксировать просмотр страницы. Счётчик инициализирован с defer:true,
+ * поэтому каждый просмотр (включая первую загрузку) отправляется только отсюда.
+ */
+export function hit(url: string, options?: YmHitOptions) {
   if (typeof window === 'undefined' || !window.ym || !YM_ID) return
-  window.ym(Number(YM_ID), 'hit', url)
+  window.ym(Number(YM_ID), 'hit', url, options)
 }
