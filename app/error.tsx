@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { TELEGRAM_URL } from '@/lib/telegram'
@@ -42,7 +43,7 @@ export default function ErrorPage({
           >
             <RefreshCw className="h-5 w-5" /> Обновить
           </button>
-          <a
+          <Link
             href="/"
             className={cn(
               buttonVariants({ size: 'lg', variant: 'outline' }),
@@ -50,7 +51,7 @@ export default function ErrorPage({
             )}
           >
             <Home className="h-5 w-5" /> На главную
-          </a>
+          </Link>
         </div>
         <a
           href={TELEGRAM_URL}

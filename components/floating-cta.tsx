@@ -8,7 +8,6 @@ import { X } from 'lucide-react'
 export function FloatingCta() {
   const [mounted, setMounted] = useState(false)
   const [hint, setHint] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
 
   // Appear after a short delay so it doesn't fight the hero for attention.
   useEffect(() => {
@@ -21,8 +20,6 @@ export function FloatingCta() {
       clearTimeout(t3)
     }
   }, [])
-
-  if (dismissed) return null
 
   return (
     <div

@@ -5,15 +5,21 @@
 **Что было.** После доработки форм провели полный аудит проекта на «идеальное» состояние.
 
 **Что сделано.**
-- Зависимости — `pnpm audit` прогнан, уязвимости приложения закрыты; оставшиеся транзитивные (babel/postcss через `next`, только build-time) закрыты через `pnpm.overrides`.
-- Код — `cn` в компонентах `ui/*` (`accordion`, `input`, `label`) переведён с фейкового пакета на `@/lib/utils`; `next.config.mjs`, `app/sitemap.ts` актуализированы; добавлен `eslint.config.mjs` (flat config).
-- Служебные страницы — добавлены `app/not-found.tsx`, `app/error.tsx`, `app/manifest.ts`; `.gitignore` дополнен.
-- Политика ПДн — создана страница `app/privacy/page.tsx`, ссылка в футере и во всех трёх формах (контакты, калькулятор `components/calculator.tsx`, анкета `components/career-form.tsx`) — под кнопкой отправки теперь кликабельная ссылка на `/privacy` вместо простого текста.
-- Хедер/футер/логотип — навигация, кнопки «Рассчитать» и логотип актуализированы.
+- Зависимости — обновлены до актуальных: `next` 16.3.3 → 16.3.6, `react`/`react-dom` → 19.3.0, `framer-motion` → 13.4.3, `lucide-react` → 1.48.0, `@base-ui/react` → 1.8.0, `tailwind-merge` → 3.7.0, `typescript` → 5.9.3, `eslint` 9 + `eslint-config-next` 16.3.6. Удалены лишние пакеты `cn` (фейковый, дублирует `lib/utils`) и `shadcn` из prod-зависимостей (перенесён в dev). Транзитивные уязвимости из `pnpm audit` (`nanoid`, `browserslist`, `baseline-browser-mapping` — только build-time через babel/postcss) закрыты через `overrides` в `pnpm-workspace.yaml`; там же зафиксирован `allowBuilds.unrs-resolver: false`, чтобы `pnpm install` не ругался. `pnpm install --frozen-lockfile` проходит.
+- `next.config.mjs` — убраны `typescript.ignoreBuildErrors: true` (сборка теперь падает на ошибках типов, как и должна) и `images.unoptimized: true` (включён оптимизатор: AVIF/WebP, ресайз под viewport). Добавлен `agentRules: false` — Next 16.3 иначе генерирует `AGENTS.md`/`CLAUDE.md` в корне при каждом `dev`.
+- Код — `cn` в `components/ui/{accordion,input,label}.tsx` переведён с пакета `cn` на `@/lib/utils`. Все внутренние ссылки (`site-header`, `site-footer`, `logo`, `not-found`, `error`) переведены с `<a>` на `next/link` — навигация стала клиентской, без полной перезагрузки; у бургер-кнопки добавлены `aria-expanded`/`aria-controls`. В `floating-cta.tsx` удалено мёртвое состояние `dismissed`. На `<html>` добавлен `data-scroll-behavior="smooth"` (требование Next при `scroll-behavior: smooth` в CSS). В футере вместо двух мёртвых ссылок `href="#"` («Политика конфиденциальности», «Договор оферты») — одна рабочая на `/privacy`.
+- `app/sitemap.ts` — добавлен `/vacancies` (раньше в sitemap была только главная).
+- Служебные страницы — `app/not-found.tsx` (404 в стиле сайта с хедером/футером и CTA), `app/error.tsx` (error boundary с «Обновить», «На главную» и ссылкой на Telegram), `app/manifest.ts` (PWA-манифест: имя, цвета, иконка).
+- Политика ПДн — новая страница `app/privacy/page.tsx` (152-ФЗ: какие данные, зачем, как передаются в Telegram, Метрика/cookies, права, контакты). Ссылка на неё — в футере и под кнопкой отправки во всех трёх формах (`contacts.tsx`, `calculator.tsx`, `career-form.tsx`): раньше был просто текст «соглашаетесь с политикой», на которую нельзя было перейти.
+- Инфраструктура — `eslint.config.mjs` (flat config на `eslint-config-next`), скрипты `lint` и `typecheck` в `package.json`; `.gitignore` дополнен `*.tsbuildinfo`, `next-env.d.ts`.
 
 **Как проверено.**
-- `next build` — без ошибок, 10 маршрутов, `/privacy` статический.
-- Браузер (agent-browser): `/privacy` рендерится (`h1` «Политика обработки персональных данных»), на главной 2 ссылки на `/privacy` (калькулятор + контакты).
+- `pnpm audit` — «No known vulnerabilities found»; `pnpm install --frozen-lockfile` — ок.
+- `pnpm typecheck` (tsc --noEmit) — 0 ошибок; `pnpm lint` — 0 ошибок (одно осознанное `eslint-disable` для `<noscript><img>` пикселя Метрики).
+- `next build` — 10 маршрутов, все статические кроме `/api/lead`.
+- Production-режим (`next start`, порт 3100): hero-картинка отдаётся как `/_next/image?url=%2Fhero-highway.png&w=3840`, оптимизатор возвращает `image/avif` 48.8 КБ вместо исходных 1.68 МБ (в 34 раза меньше). В dev-превью v0 оптимизатор принудительно отключён средой (`modifyConfig from v0-preview`) — это не баг проекта.
+- curl: `/`, `/vacancies`, `/privacy`, `/sitemap.xml`, `/manifest.webmanifest`, `/robots.txt` — 200; `/nope-404` — 404. Sitemap содержит обе страницы. Security-заголовки на месте (`nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`, `HSTS`), `X-Powered-By` отсутствует.
+- Браузер (agent-browser, 1478×879, dark): `/privacy` и `/nope-404` отрендерены без визуальных дефектов (скриншоты); клик «Вакансии» в хедере — переход без перезагрузки страницы (`beforeunload` не сработал, `location.pathname === '/vacancies'`). На главной и `/vacancies` по 2 ссылки на `/privacy` (форма + футер).
 
 ## 25.09.2026 — Формы: заявка собирается в готовое сообщение и открывается в Telegram менеджера
 

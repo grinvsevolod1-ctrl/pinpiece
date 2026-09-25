@@ -38,6 +38,8 @@ export function YandexMetrika() {
     <>
       <noscript>
         <div>
+          {/* Трекинг-пиксель Метрики для клиентов без JS — next/image здесь неприменим */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`https://mc.yandex.ru/watch/${YM_ID}`}
             style={{ position: 'absolute', left: '-9999px' }}
