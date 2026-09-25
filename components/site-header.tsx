@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Logo } from './logo'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

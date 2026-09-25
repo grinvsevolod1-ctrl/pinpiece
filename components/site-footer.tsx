@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Logo } from './logo'
 import { Mail, MapPin } from 'lucide-react'
 import { SOCIALS, TelegramIcon, VkIcon } from './social-icons'
@@ -81,12 +82,12 @@ export function SiteFooter() {
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <a
+                    <Link
                       href={l.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {l.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -96,14 +97,9 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <span>© {new Date().getFullYear()} PinPiece. Все права защищены.</span>
-          <div className="flex gap-6">
-            <a href="#" className="transition-colors hover:text-foreground">
-              Политика конфиденциальности
-            </a>
-            <a href="#" className="transition-colors hover:text-foreground">
-              Договор оферты
-            </a>
-          </div>
+          <Link href="/privacy" className="transition-colors hover:text-foreground">
+            Политика обработки персональных данных
+          </Link>
         </div>
       </div>
     </footer>
