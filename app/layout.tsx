@@ -93,7 +93,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={manrope.variable}>
+    <html lang="ru" className={manrope.variable} data-scroll-behavior="smooth">
       <head>
         <YandexMetrikaScript />
       </head>

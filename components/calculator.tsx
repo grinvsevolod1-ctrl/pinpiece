@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -377,8 +378,11 @@ export function Calculator() {
                           <TelegramIcon className="h-5 w-5" /> Отправить в Telegram
                         </button>
                         <p className="text-center text-[11px] leading-snug text-muted-foreground">
-                          Откроется чат с менеджером с готовым расчётом. Нажимая кнопку, вы соглашаетесь с политикой
-                          обработки персональных данных.
+                          Откроется чат с менеджером с готовым расчётом. Нажимая кнопку, вы соглашаетесь с{' '}
+                          <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+                            политикой обработки персональных данных
+                          </Link>
+                          .
                         </p>
                       </motion.div>
                     ) : (

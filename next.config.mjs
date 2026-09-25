@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  agentRules: false,
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buttonVariants } from '@/components/ui/button'
@@ -203,8 +204,11 @@ export function CareerForm() {
         <TelegramIcon className="h-5 w-5" /> Откликнуться в Telegram
       </button>
       <p className="text-center text-xs text-muted-foreground">
-        Откроется чат с рекрутёром с готовой анкетой — останется нажать «Отправить». Нажимая кнопку, вы соглашаетесь с
-        политикой обработки персональных данных.
+        Откроется чат с рекрутёром с готовой анкетой — останется нажать «Отправить». Нажимая кнопку, вы соглашаетесь с{' '}
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          политикой обработки персональных данных
+        </Link>
+        .
       </p>
     </form>
   )

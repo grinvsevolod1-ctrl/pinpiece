@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 export function Logo({
@@ -8,7 +9,7 @@ export function Logo({
   size?: 'md' | 'lg'
 }) {
   return (
-    <a
+    <Link
       href="/"
       aria-label="PinPiece — на главную"
       className={cn('group inline-flex select-none flex-col leading-none', className)}
@@ -38,6 +39,6 @@ export function Logo({
       >
         Логистический центр
       </span>
-    </a>
+    </Link>
   )
 }
