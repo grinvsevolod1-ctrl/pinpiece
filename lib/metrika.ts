@@ -42,8 +42,9 @@ export interface YmHitOptions {
 }
 
 /**
- * Зафиксировать просмотр страницы. Счётчик инициализирован с defer:true,
- * поэтому каждый просмотр (включая первую загрузку) отправляется только отсюда.
+ * Зафиксировать просмотр страницы. Счётчик инициализирован с defer:true, поэтому
+ * автоматических просмотров нет: первый hit шлёт инлайн-код счётчика в <head>,
+ * клиентские переходы App Router — YandexMetrikaPageviews через эту функцию.
  */
 export function hit(url: string, options?: YmHitOptions) {
   if (typeof window === 'undefined' || !window.ym || !YM_ID) return
